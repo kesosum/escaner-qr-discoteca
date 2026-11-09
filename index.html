@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1">
+  <title>Escáner QR - Discoteca</title>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <style>
+    body {
+      background: #101827;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    main { max-width: 480px; margin: auto; }
+    button {
+      padding: 15px;
+      margin: 10px 0;
+      width: 100%;
+      background: #38bdf8;
+      border: 0;
+      border-radius: 10px;
+      font-size: 17px;
+    }
+    #reader {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    #resultado {
+      padding: 15px;
+      overflow-wrap: anywhere;
+    }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Escáner QR</h1>
+  <p>Prueba de cámara para iPhone</p>
+
+  <div id="reader"></div>
+
+  <button onclick="iniciar()">Iniciar cámara</button>
+  <button onclick="detener()">Detener cámara</button>
+
+  <p id="resultado">Esperando escaneo...</p>
+</main>
+
+<script>
+  let scanner = null;
+
+  async function iniciar() {
+    const resultado = document.getElementById('resultado');
+
+    try {
+      if (scanner) return;
+
+      scanner = new Html5Qrcode('reader');
+
+      await scanner.start(
+        { facingMode: 'environment' },
+        { fps: 10, qrbox: 240 },
+        texto => {
+          resultado.textContent = 'QR detectado correctamente';
+          scanner.pause(true);
+        },
+        () => {}
+      );
+    } catch (error) {
+      resultado.textContent = 'Error: ' + error;
+      scanner = null;
+    }
+  }
+
+  async function detener() {
+    if (!scanner) return;
+
+    try {
+      if (scanner.getState() === 3) {
+        scanner.resume();
+      }
+      await scanner.stop();
+      scanner.clear();
+    } catch (error) {
+      document.getElementById('resultado').textContent =
+        'Error: ' + error;
+    } finally {
+      scanner = null;
+    }
+  }
+</script>
+</body>
+</html>
