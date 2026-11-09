@@ -38,6 +38,40 @@
 </head>
 <body>
 <main>
+  
+<div id="accesoPersonal">
+  <h2>🔐 Acceso del personal</h2>
+  <p>Ingresa tu PIN para continuar</p>
+
+  <input
+    type="password"
+    id="pinPersonal"
+    placeholder="PIN del trabajador"
+    autocomplete="off"
+  >
+
+  <button onclick="entrarPersonal()">
+    Entrar al escáner
+  </button>
+
+  <p id="mensajeAcceso"></p>
+</div>
+
+<script>
+function entrarPersonal() {
+  const pin = document.getElementById('pinPersonal').value;
+  const mensaje = document.getElementById('mensajeAcceso');
+
+  if (!pin.trim()) {
+    mensaje.textContent = 'Ingresa tu PIN';
+    return;
+  }
+
+  mensaje.textContent =
+    'Pantalla de prueba: PIN ingresado. Aún no verificado.';
+}
+</script>
+
   <h1>Escáner QR</h1>
   <p>Prueba de cámara para iPhone</p>
 
@@ -48,6 +82,7 @@
 
   <p id="resultado">Esperando escaneo...</p>
 </main>
+
 
 <script>
   let scanner = null;
